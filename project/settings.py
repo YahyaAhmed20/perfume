@@ -151,11 +151,10 @@ STATICFILES_DIRS=[
 ]
 
 
-cloudinary_url  = config('CLOUDINARY_URL')
+
 cloudinary.config(
-    cloud_name = cloudinary_url.split('@')[1],  # بعد الـ @
-    api_key = cloudinary_url.split('//')[1].split(':')[0],  # قبل :
-    api_secret = cloudinary_url.split(':')[1].split('@')[0]  # بين : و @
+    secure=True,
+    cloudinary_url=config('CLOUDINARY_URL')
 )
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
