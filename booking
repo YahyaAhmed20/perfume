@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+<div style="background-color: #f9f9f9; direction: rtl; text-align: right; padding: 30px;">
+
+  <div class="container">
+    <h2 class="text-center mb-4" style="color: #c19d56;">📝 إتمام الحجز</h2>
+
+    <form method="post" class="p-4 shadow" style="background: white; border-radius: 10px;">
+      {% csrf_token %}
+      <div class="form-group">
+        <label>الاسم الكامل: <span style="color: red;">*</span></label>
+        <input type="text" name="name" class="form-control" placeholder="اكتب اسمك" required>
+      </div>
+
+      <div class="form-group">
+        <label>رقم الهاتف (11 رقم): <span style="color: red;">*</span></label>
+        <input type="tel" name="phone" class="form-control" placeholder="01xxxxxxxxx" 
+               pattern="[0-9]{11}" 
+               title="يجب إدخال 11 رقم فقط" 
+               minlength="11" 
+               maxlength="11" 
+               required>
+      </div>
+
+      <div class="form-group">
+        <label>العنوان: <span style="color: red;">*</span></label>
+        <textarea name="address" class="form-control" rows="3" placeholder="اكتب عنوانك الكامل" required></textarea>
+      </div>
+
+      <h5 class="mt-4" style="color: #c19d56;">الإجمالي الكلي: {{ total_price }} جنيه</h5>
+
+      <div class="text-center mt-4">
+        <button type="submit" class="btn" style="background-color: #c19d56; color: white; font-weight: bold;">تأكيد الحجز</button>
+        <a href="{% url 'home:home' %}" class="btn btn-outline-dark" style="border-color: #c19d56; color: #c19d56;">حجز منتج آخر</a>
+      </div>
+    </form>
+  </div>
+
+</div>
+{% endblock body %}

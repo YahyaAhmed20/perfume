@@ -1,0 +1,69 @@
+{% for perfume in perfumes %}
+  <div class="col-md-4 mb-4 d-flex align-items-stretch">
+    <div class="perfume-card w-100 p-4"
+      style="background: #fff; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); cursor: pointer;"
+      data-toggle="modal" data-target="#perfumeModal{{ perfume.id }}">
+      
+     <div>
+  <h2 style="
+    font-family: 'Cairo', sans-serif; 
+    font-weight: 700; 
+    color: #c19d56;
+    font-size: 24px;
+    letter-spacing: 0.5px;
+    margin-bottom: 10px;
+  ">
+    {{ perfume.name_ar }} - {{ perfume.name_en }}
+  </h2>
+  <p style="color: #c19d56; font-weight: bold; font-size: 18px;">
+    {% if perfume.gender == 'M' %}
+      رجالي
+    {% elif perfume.gender == 'F' %}
+      حريمي
+    {% else %}
+      للجنسين
+    {% endif %}
+  </p>
+</div>
+
+
+      <div style="flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+        <img src="{{ perfume.image.url }}" alt="{{ perfume.name_ar }}" 
+             style="width: 100%; max-width: 320px; height: 330px; object-fit: cover; border-radius: 10px;">
+      </div>
+    </div>
+  </div>
+
+  <!-- نفس المودال -->
+  <div class="modal fade" id="perfumeModal{{ perfume.id }}" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content" style="border-radius: 15px;">
+        <div class="modal-header" style="background-color: #c19d56; color: white;">
+          <h5 class="modal-title">{{ perfume.name_ar }} - {{ perfume.name_en }}</h5>
+          <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <div class="modal-body" style="text-align: right;">
+          <form method="post" action="{% url 'home:create_order' perfume.id %}">
+            {% csrf_token %}
+            <label>اختر السعة:</label>
+            <select name="size_id" class="form-control mb-3">
+              {% for size in perfume.sizes.all %}
+                <option value="{{ size.id }}">{{ size.size_ml }} مل - {{ size.price }} جنيه</option>
+              {% endfor %}
+            </select>
+            <label>عدد الزجاجات:</label>
+            <input type="number" name="quantity" class="form-control mb-3" min="1" value="1">
+            <button type="submit" class="btn btn-block" style="background-color: #c19d56; color: white; font-weight: bold;">
+              اطلب الآن
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{% empty %}
+  <p class="text-center" style="color: #c19d56; font-size: 20px;">لا توجد نتائج مطابقة</p>
+{% endfor %}

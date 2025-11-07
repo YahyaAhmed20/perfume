@@ -1,0 +1,163 @@
+{% load static %}
+<style>
+.navbar {
+  position: relative;
+  z-index: 10;
+  padding: 0.8rem 1rem;
+  background-color: #000000 !important;
+  border-bottom: 2px solid #c19d56;
+  box-shadow: 0 2px 10px rgba(193,157,86,0.3);
+}
+
+/* اللوجو */
+.brand-logo {
+  height: 230px;
+  width: auto;
+  filter: drop-shadow(0 0 6px rgba(193,157,86,0.4));
+  transition: all 0.3s ease;
+}
+
+/* النص بجانب اللوجو */
+.logo-text {
+  font-family: 'Prata', serif;
+  font-size: 18px;
+  font-weight: 500;
+  color: #c19d56;
+  margin-right: 15px; /* بدل margin-left */
+  letter-spacing: 1px;
+  white-space: nowrap;
+}
+
+/* تنسيق اللوجو والنص */
+.brand-container {
+  display: flex;
+  align-items: center;
+  flex-direction: row-reverse; /* عكس الاتجاه */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-19%, -50%);
+  z-index: -1;
+}
+
+/* تعديل زر القائمة للموبايل */
+.navbar-toggler {
+  border-color: #c19d56 !important;
+  background-color: rgba(193,157,86,0.1) !important;
+}
+
+.navbar-toggler .oi {
+  color: #c19d56 !important;
+}
+
+.navbar-toggler:focus {
+  box-shadow: 0 0 0 0.2rem rgba(193,157,86,0.25) !important;
+}
+
+/* تعديل الروابط */
+.navbar-nav .nav-link {
+  color: #c19d56 !important;
+  transition: all 0.3s ease;
+}
+
+.navbar-nav .nav-link:hover {
+  color: #ffffff !important;
+  text-shadow: 0 0 8px rgba(193,157,86,0.8);
+}
+
+/* تعديل Badge السلة */
+.badge {
+  background-color: #c19d56 !important;
+  color: #000000 !important;
+  font-weight: bold;
+}
+
+/* للشاشات المتوسطة */
+@media (max-width: 992px) {
+  .brand-logo {
+    height: 200px;
+  }
+  .logo-text {
+    font-size: 16px;
+  }
+}
+
+/* للموبايل */
+@media (max-width: 576px) {
+  .brand-container {
+    top: 50%;
+    left: 75% !important;
+    transform: translate(-19%, -40%);
+    flex-direction: column; /* فوق بعض للموبايل */
+  }
+  .brand-logo {
+    height: 120px;
+  }
+  .logo-text {
+    font-size: 14px;
+    margin-right: 0;
+    margin-top: 5px;
+  }
+}
+
+/* تعديل القائمة المنسدلة للموبايل */
+@media (max-width: 991px) {
+  .navbar-collapse {
+    background-color: #000000;
+    padding: 1rem;
+    margin-top: 0.5rem;
+    border: 1px solid #c19d56;
+    border-radius: 8px;
+  }
+}
+</style>
+
+<nav class="navbar navbar-expand-lg navbar-dark ftco_navbar" id="ftco-navbar" style="padding: 0.8rem 1rem;">
+  <div class="container d-flex justify-content-between align-items-center">
+    
+    <!-- اللوجو -->
+    <a class="navbar-brand d-flex align-items-center position-relative" 
+       href="{% url 'home:home' %}" 
+       style="font-family: 'Prata', 'Cairo', sans-serif; direction: rtl; text-decoration: none;">
+       
+      <div class="brand-container">
+        <img src="{% static 'images/ss1-removebg-preview.png' %}" 
+        alt="سِيره للعطور" 
+        class="brand-logo">
+        <span class="logo-text">YOUR SCENT BIOGRAPHY</span>
+      </div>
+    </a>
+
+    <!-- زر القائمة -->
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" 
+            aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="oi oi-menu"></span>
+    </button>
+
+    <!-- الروابط -->
+    <div class="collapse navbar-collapse" id="ftco-nav">
+      <ul class="navbar-nav ml-auto align-items-center">
+        <li class="nav-item active">
+          <a href="{% url 'home:home' %}" class="nav-link" 
+             style="color: #c19d56; font-weight: 700; font-size: 25px; letter-spacing: 0.5px;">
+            الرئيسية
+          </a>
+        </li>
+
+        <!-- السلة -->
+        <li class="nav-item ml-4">
+          <a href="{% url 'home:cart' %}" class="nav-link position-relative" style="color: #c19d56;">
+            <i class="fas fa-shopping-cart" 
+               style="font-size: 26px; filter: drop-shadow(0 0 4px rgba(193,157,86,0.6));"></i>
+            <span class="badge badge-light position-absolute" 
+                  style="top: -5px; right: -10px; background-color: #c19d56; color: #000000; font-size: 13px; border-radius: 50%; font-weight: bold;">
+              {{ cart_count|default:"0" }}
+            </span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">

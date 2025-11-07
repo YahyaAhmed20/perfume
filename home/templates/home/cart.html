@@ -1,0 +1,500 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+
+<style>
+  /* تحسينات عامة - خلفية سوداء */
+  .cart-container {
+    background-color: #000000;
+    direction: rtl;
+    text-align: center;
+    padding: 30px 15px;
+    min-height: 70vh;
+  }
+
+  .cart-title {
+    color: #c19d56;
+    margin-bottom: 30px;
+    font-size: 32px;
+    font-weight: 700;
+    text-shadow: 0 0 10px rgba(193, 157, 86, 0.3);
+  }
+
+  /* تحسين الجدول للشاشات الكبيرة - خلفية سوداء */
+  .cart-table {
+    background: #1a1a1a;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(193, 157, 86, 0.3);
+    border: 2px solid #c19d56;
+  }
+
+  .cart-table thead {
+    background-color: #c19d56;
+    color: #000000;
+  }
+
+  .cart-table th {
+    font-weight: 700;
+    padding: 15px 10px;
+    border: none;
+  }
+
+  .cart-table td {
+    padding: 15px 10px;
+    vertical-align: middle;
+    color: #c19d56;
+    border-color: rgba(193, 157, 86, 0.2);
+  }
+
+  .cart-table tbody tr {
+    border-bottom: 1px solid rgba(193, 157, 86, 0.2);
+  }
+
+  /* أزرار الكمية */
+  .quantity-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .quantity-btn {
+    width: 30px;
+    height: 30px;
+    border: 1px solid #c19d56;
+    background: #000000;
+    color: #c19d56;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-weight: 700;
+  }
+
+  .quantity-btn:hover {
+    background: #c19d56;
+    color: #000000;
+    box-shadow: 0 0 8px rgba(193, 157, 86, 0.5);
+  }
+
+  .quantity-value {
+    min-width: 40px;
+    font-weight: 600;
+    color: #c19d56;
+  }
+
+  /* أزرار الإجراءات */
+  .action-buttons {
+    margin-top: 30px;
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn-custom {
+    padding: 12px 30px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: all 0.3s;
+  }
+
+  .btn-outline-custom {
+    border: 2px solid #c19d56;
+    color: #c19d56;
+    background: transparent;
+  }
+
+  .btn-outline-custom:hover {
+    background: #c19d56;
+    color: #000000;
+    box-shadow: 0 0 10px rgba(193, 157, 86, 0.5);
+  }
+
+  .btn-primary-custom {
+    background-color: #c19d56;
+    color: #000000;
+    border: none;
+    font-weight: 700;
+  }
+
+  .btn-primary-custom:hover {
+    background-color: #d4b06a;
+    box-shadow: 0 0 10px rgba(193, 157, 86, 0.5);
+  }
+
+  /* زر الحذف */
+  .btn-danger {
+    background-color: #dc3545;
+    border: none;
+    color: white;
+    transition: all 0.3s;
+  }
+
+  .btn-danger:hover {
+    background-color: #c82333;
+    box-shadow: 0 0 8px rgba(220, 53, 69, 0.5);
+  }
+
+  /* التجاوب للشاشات المتوسطة والصغيرة */
+  @media (max-width: 992px) {
+    .cart-title {
+      font-size: 28px;
+    }
+
+    .cart-table th,
+    .cart-table td {
+      padding: 10px 5px;
+      font-size: 14px;
+    }
+
+    .btn-custom {
+      padding: 10px 20px;
+      font-size: 14px;
+    }
+  }
+
+  /* للهواتف - تحويل الجدول لعرض بطاقات */
+  @media (max-width: 768px) {
+    .cart-title {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    /* إخفاء الجدول التقليدي */
+    .desktop-table {
+      display: none;
+    }
+
+    /* عرض البطاقات */
+    .mobile-cards {
+      display: block;
+    }
+
+    .cart-card {
+      background: #1a1a1a;
+      border: 2px solid #c19d56;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 10px rgba(193, 157, 86, 0.3);
+    }
+
+    .cart-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid rgba(193, 157, 86, 0.3);
+    }
+
+    .cart-card-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #c19d56;
+      margin: 0;
+    }
+
+    .cart-card-body {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .cart-card-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+    }
+
+    .cart-card-label {
+      font-weight: 600;
+      color: #c19d56;
+      font-size: 14px;
+    }
+
+    .cart-card-value {
+      font-weight: 600;
+      color: #d4b06a;
+      font-size: 14px;
+    }
+
+    .cart-card-footer {
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 2px solid rgba(193, 157, 86, 0.3);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .cart-card-total {
+      font-size: 18px;
+      font-weight: 700;
+      color: #c19d56;
+    }
+
+    .btn-remove-mobile {
+      background-color: #dc3545;
+      color: white;
+      border: none;
+      padding: 8px 20px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+
+    .btn-remove-mobile:hover {
+      background-color: #c82333;
+      box-shadow: 0 0 8px rgba(220, 53, 69, 0.5);
+    }
+
+    .action-buttons {
+      flex-direction: column;
+      width: 100%;
+      padding: 0 15px;
+    }
+
+    .btn-custom {
+      width: 100%;
+      max-width: 550px;
+    }
+
+    .total-section {
+      background: #1a1a1a;
+      border: 2px solid #c19d56;
+      padding: 20px;
+      border-radius: 12px;
+      margin: 20px 15px;
+      box-shadow: 0 2px 10px rgba(193, 157, 86, 0.3);
+    }
+
+    .total-section h4 {
+      font-size: 20px;
+      margin: 0;
+      color: #c19d56;
+    }
+  }
+
+  /* للشاشات الكبيرة - إخفاء البطاقات */
+  @media (min-width: 769px) {
+    .mobile-cards {
+      display: none;
+    }
+
+    .desktop-table {
+      display: table;
+    }
+
+    .total-section {
+      background: #1a1a1a;
+      border: 2px solid #c19d56;
+      padding: 20px;
+      border-radius: 12px;
+      margin: 20px auto;
+      box-shadow: 0 2px 10px rgba(193, 157, 86, 0.3);
+      max-width: 600px;
+    }
+
+    .total-section h4 {
+      color: #c19d56;
+      font-size: 24px;
+    }
+  }
+
+  /* الرسائل الفارغة */
+  .empty-cart {
+    padding: 60px 20px;
+  }
+
+  .empty-cart p {
+    color: #c19d56;
+    font-size: 18px;
+    margin-bottom: 20px;
+  }
+
+  @media (max-width: 768px) {
+    .empty-cart {
+      padding: 40px 20px;
+    }
+
+    .empty-cart p {
+      font-size: 16px;
+    }
+  }
+</style>
+
+<div class="cart-container">
+
+  <h2 class="cart-title">🛒 سلة التسوق</h2>
+
+  {% if cart_items %}
+    <div class="container">
+      
+      <!-- عرض الجدول للشاشات الكبيرة -->
+      <table class="table table-bordered text-center cart-table desktop-table">
+        <thead>
+          <tr>
+            <th>المنتج</th>
+            <th>السعة</th>
+            <th>الكمية</th>
+            <th>السعر الإجمالي</th>
+            <th>إجراء</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in cart_items %}
+            <tr id="item-row-{{ item.id }}">
+              <td>{{ item.perfume_size.perfume.name_ar }}</td>
+              <td>{{ item.perfume_size.size_ml }} مل</td>
+              <td>
+                <div class="quantity-controls">
+                  <button class="quantity-btn update-quantity" data-action="decrease" data-item-id="{{ item.id }}">-</button>
+                  <span class="quantity-value" id="quantity-{{ item.id }}">{{ item.quantity }}</span>
+                  <button class="quantity-btn update-quantity" data-action="increase" data-item-id="{{ item.id }}">+</button>
+                </div>
+              </td>
+              <td id="item-total-{{ item.id }}">{{ item.total_price }} جنيه</td>
+              <td>
+                <button class="btn btn-sm btn-danger remove-item" data-item-id="{{ item.id }}">🗑️ حذف</button>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <!-- عرض البطاقات للهواتف -->
+      <div class="mobile-cards">
+        {% for item in cart_items %}
+          <div class="cart-card" id="item-card-{{ item.id }}">
+            <div class="cart-card-header">
+              <h3 class="cart-card-title">{{ item.perfume_size.perfume.name_ar }}</h3>
+            </div>
+            
+            <div class="cart-card-body">
+              <div class="cart-card-row">
+                <span class="cart-card-label">السعة:</span>
+                <span class="cart-card-value">{{ item.perfume_size.size_ml }} مل</span>
+              </div>
+              
+              <div class="cart-card-row">
+                <span class="cart-card-label">الكمية:</span>
+                <div class="quantity-controls">
+                  <button class="quantity-btn update-quantity" data-action="decrease" data-item-id="{{ item.id }}">-</button>
+                  <span class="quantity-value" id="quantity-mobile-{{ item.id }}">{{ item.quantity }}</span>
+                  <button class="quantity-btn update-quantity" data-action="increase" data-item-id="{{ item.id }}">+</button>
+                </div>
+              </div>
+            </div>
+            
+            <div class="cart-card-footer">
+              <span class="cart-card-total" id="item-total-mobile-{{ item.id }}">{{ item.total_price }} جنيه</span>
+              <button class="btn-remove-mobile remove-item" data-item-id="{{ item.id }}">🗑️ حذف</button>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+
+      <div class="total-section">
+        <h4>الإجمالي الكلي: <span id="total-price" style="color: #c19d56;">{{ total_price }} جنيه</span></h4>
+      </div>
+
+      <div class="action-buttons">
+        <a href="{% url 'home:home' %}" class="btn btn-custom btn-outline-custom">حجز منتج آخر</a>
+        <a href="{% url 'home:booking' %}" class="btn btn-custom btn-primary-custom">إتمام الحجز</a>
+      </div>
+    </div>
+  {% else %}
+    <div class="empty-cart">
+      <p>السلة فارغة حالياً.</p>
+      <a href="{% url 'home:home' %}" class="btn btn-custom btn-primary-custom">تصفح المنتجات</a>
+    </div>
+  {% endif %}
+
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(function() {
+
+    // ✅ تحديث الكمية
+    $('.update-quantity').click(function() {
+      const itemId = $(this).data('item-id');
+      const action = $(this).data('action');
+      
+      $.ajax({
+        url: "{% url 'home:update_cart_quantity' %}",
+        method: "POST",
+        data: {
+          'item_id': itemId,
+          'action': action,
+          'csrfmiddlewaretoken': '{{ csrf_token }}'
+        },
+        success: function(data) {
+          // تحديث الكمية في كلا العرضين
+          $(`#quantity-${itemId}`).text(data.new_quantity);
+          $(`#quantity-mobile-${itemId}`).text(data.new_quantity);
+          
+          // تحديث السعر في كلا العرضين
+          $(`#item-total-${itemId}`).text(data.item_total + " جنيه");
+          $(`#item-total-mobile-${itemId}`).text(data.item_total + " جنيه");
+          
+          // تحديث الإجمالي
+          $('#total-price').text(data.total_price + " جنيه");
+
+          // حذف العنصر إذا أصبحت الكمية صفر
+          if (data.new_quantity === 0) {
+            $(`#item-row-${itemId}`).fadeOut(300, function() {
+              $(this).remove();
+            });
+            $(`#item-card-${itemId}`).fadeOut(300, function() {
+              $(this).remove();
+            });
+          }
+        }
+      });
+    });
+
+    // ✅ حذف المنتج بالكامل
+    $('.remove-item').click(function() {
+      const itemId = $(this).data('item-id');
+      
+      if (confirm('هل أنت متأكد من حذف هذا المنتج؟')) {
+        $.ajax({
+          url: "{% url 'home:remove_cart_item' %}",
+          method: "POST",
+          data: {
+            'item_id': itemId,
+            'csrfmiddlewaretoken': '{{ csrf_token }}'
+          },
+          success: function(data) {
+            // حذف من كلا العرضين
+            $(`#item-row-${itemId}`).fadeOut(300, function() {
+              $(this).remove();
+            });
+            $(`#item-card-${itemId}`).fadeOut(300, function() {
+              $(this).remove();
+            });
+            
+            // تحديث الإجمالي
+            $('#total-price').text(data.total_price + " جنيه");
+            
+            // إعادة تحميل الصفحة إذا أصبحت السلة فارغة
+            if (data.total_price === 0) {
+              setTimeout(function() {
+                location.reload();
+              }, 400);
+            }
+          }
+        });
+      }
+    });
+
+  });
+</script>
+{% endblock body %}

@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+<div style="background-color: #f9f9f9; direction: rtl; text-align: center; padding: 50px;">
+
+  <div class="card mx-auto shadow" style="max-width: 500px; border-radius: 15px;">
+    <div class="card-body">
+      <h3 style="color: #c19d56; font-weight: bold;">تم إضافة المنتج إلى السلة ✅</h3>
+      <p style="font-size: 18px;">{{ perfume.name_ar }} - {{ size.size_ml }} مل × {{ quantity }}</p>
+      <p style="color: #333;">الإجمالي: {{ total_price }} جنيه</p>
+
+      <div class="mt-4 d-flex justify-content-around">
+        <a href="{% url 'home:home' %}" class="btn btn-outline-dark" style="border-color: #c19d56; color: #c19d56;">حجز منتج آخر</a>
+        <a href="{% url 'home:cart' %}" class="btn" style="background-color: #c19d56; color: white;">حجز</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+{% endblock body %}

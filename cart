@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+<div style="background-color: #f9f9f9; direction: rtl; text-align: center; padding: 30px;">
+
+  <h2 style="color: #c19d56; margin-bottom: 30px;">🛒 سلة التسوق</h2>
+
+  {% if cart_items %}
+    <div class="container">
+      <table class="table table-bordered text-center" style="background: white;">
+        <thead style="background-color: #c19d56; color: white;">
+          <tr>
+            <th>المنتج</th>
+            <th>السعة</th>
+            <th>الكمية</th>
+            <th>السعر الإجمالي</th>
+            <th>إجراء</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in cart_items %}
+            <tr id="item-row-{{ item.id }}">
+              <td>{{ item.perfume_size.perfume.name_ar }}</td>
+              <td>{{ item.perfume_size.size_ml }} مل</td>
+              <td>
+                <div class="d-flex justify-content-center align-items-center">
+                  <button class="btn btn-sm btn-outline-secondary update-quantity" data-action="decrease" data-item-id="{{ item.id }}">-</button>
+                  <span class="mx-2 quantity-value" id="quantity-{{ item.id }}">{{ item.quantity }}</span>
+                  <button class="btn btn-sm btn-outline-secondary update-quantity" data-action="increase" data-item-id="{{ item.id }}">+</button>
+                </div>
+              </td>
+              <td id="item-total-{{ item.id }}">{{ item.total_price }} جنيه</td>
+              <td>
+                <button class="btn btn-sm btn-danger remove-item" data-item-id="{{ item.id }}">🗑️ حذف</button>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <h4 class="mt-4">الإجمالي الكلي: <span id="total-price" style="color: #c19d56;">{{ total_price }} جنيه</span></h4>
+
+      <div class="mt-4">
+        <a href="{% url 'home:home' %}" class="btn btn-outline-dark" style="border-color: #c19d56; color: #c19d56;">حجز منتج آخر</a>
+        <a href="{% url 'home:booking' %}" class="btn" style="background-color: #c19d56; color: white;">إتمام الحجز</a>
+      </div>
+    </div>
+  {% else %}
+    <p style="color: #555;">السلة فارغة حالياً.</p>
+  {% endif %}
+
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(function() {
+
+    // ✅ تحديث الكمية
+    $('.update-quantity').click(function() {
+      const itemId = $(this).data('item-id');
+      const action = $(this).data('action');
+      
+      $.ajax({
+        url: "{% url 'home:update_cart_quantity' %}",
+        method: "POST",
+        data: {
+          'item_id': itemId,
+          'action': action,
+          'csrfmiddlewaretoken': '{{ csrf_token }}'
+        },
+        success: function(data) {
+          $(`#quantity-${itemId}`).text(data.new_quantity);
+          $(`#item-total-${itemId}`).text(data.item_total + " جنيه");
+          $('#total-price').text(data.total_price + " جنيه");
+
+          if (data.new_quantity === 0) {
+            $(`#item-row-${itemId}`).fadeOut(300, function() {
+              $(this).remove();
+            });
+          }
+        }
+      });
+    });
+
+    // ✅ حذف المنتج بالكامل
+    $('.remove-item').click(function() {
+      const itemId = $(this).data('item-id');
+      
+      $.ajax({
+        url: "{% url 'home:remove_cart_item' %}",
+        method: "POST",
+        data: {
+          'item_id': itemId,
+          'csrfmiddlewaretoken': '{{ csrf_token }}'
+        },
+        success: function(data) {
+          $(`#item-row-${itemId}`).fadeOut(300, function() {
+            $(this).remove();
+          });
+          $('#total-price').text(data.total_price + " جنيه");
+        }
+      });
+    });
+
+  });
+</script>
+{% endblock body %}

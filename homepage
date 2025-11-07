@@ -1,0 +1,195 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body %}
+
+<section class="hero-wrap js-fullheight" style="background-image: url('{% static "images/bg_1.jpg" %}'); background-size: cover; background-position: center; direction: rtl;" data-stellar-background-ratio="0.5">
+  <div class="overlay" style="background: rgba(0, 0, 0, 0.55);"></div>
+  <div class="container">
+    <div class="row no-gutters slider-text js-fullheight align-items-center justify-content-center">
+      <div class="col-md-10 ftco-animate text-center text-light">
+
+        <div class="icon mb-3">
+          <span class="flaticon-lotus" style="color: #c19d56; font-size: 3rem;"></span>
+        </div>
+
+        <h1 style="font-family: 'Prata', 'Cairo', sans-serif; color: #c19d56; font-weight: 700; font-size: 50px; letter-spacing: 1px;">
+          سِيره للعطور
+        </h1>
+
+        <div class="row justify-content-center">
+          <div class="col-md-8 mb-4">
+            <p style="font-size: 18px; line-height: 1.8; color: #f2f2f2;">
+              حيث تمتزج الفخامة بالأصالة... نُقدّم لك أرقى تشكيلات العطور العربية والعالمية بروح عربية راقية.
+            </p>
+          </div>
+        </div>
+
+        <p>
+          <a href="#products" class="btn btn-primary p-3 px-5 py-4 mr-md-2" 
+             style="background-color: #c19d56; border: none; color: #fff; font-weight: 600; font-size: 18px;">
+            تسوّق الآن
+          </a>
+          <a href="#" class="btn btn-outline-light p-3 px-5 py-4 ml-md-2" 
+             style="border: 2px solid #c19d56; color: #c19d56; font-weight: 600; font-size: 18px;">
+            تواصل معنا
+          </a>
+        </p>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- شريط البحث -->
+<!-- شريط البحث -->
+<div class="container text-center my-5" style="direction: rtl;">
+  <form id="search-form" class="form-inline justify-content-center" onsubmit="return false;">
+    <div class="input-group" style="width: 320px;">
+      <input id="search-input" type="text" class="form-control"
+             placeholder="ابحث عن عطر..."
+             style="border: 2px solid #c19d56; border-radius: 30px 0 0 30px; padding: 10px 20px; font-size: 16px;">
+      
+      <div class="input-group-append">
+        <button id="search-btn" type="button" class="btn"
+                style="background-color: #c19d56; border-radius: 0 30px 30px 0; color: white; padding: 10px 20px;">
+          <i class="fas fa-search"></i>
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
+
+
+<!-- قسم المنتجات -->
+<!-- قسم المنتجات -->
+<section id="products" class="py-5" style="background-color: #f9f9f9; direction: rtl;">
+  <div class="container">
+    <!-- مهم جدًا نضيف id="products-container" هنا -->
+    <div id="products-container" class="row text-center justify-content-center">
+
+      {% for perfume in perfumes %}
+        <div class="col-md-4 mb-4 d-flex align-items-stretch">
+          <div class="perfume-card w-100 p-4" style="
+              background: #fff;
+              border-radius: 12px;
+              box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+              transition: all 0.3s ease;
+              display: flex;
+              flex-direction: column;
+              justify-content: space-between;
+              cursor: pointer;
+            "
+            data-toggle="modal" data-target="#perfumeModal{{ perfume.id }}">
+            
+  <div>
+  <h2 style="
+    font-family: 'Cairo', sans-serif; 
+    font-weight: 700; 
+    color: #c19d56;
+    font-size: 24px;
+    letter-spacing: 0.5px;
+    margin-bottom: 10px;
+  ">
+    {{ perfume.name_ar }} - {{ perfume.name_en }}
+  </h2>
+  <p style="color: #c19d56; font-weight: bold; font-size: 18px;">
+    {% if perfume.gender == 'M' %}
+      رجالي
+    {% elif perfume.gender == 'F' %}
+      حريمي
+    {% else %}
+      للجنسين
+    {% endif %}
+  </p>
+</div>
+
+
+
+            <div style="flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+              <img src="{{ perfume.image.url }}" alt="{{ perfume.name_ar }}" 
+                   style="width: 100%; max-width: 320px; height: 330px; object-fit: cover; border-radius: 10px;">
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Modal لكل منتج -->
+        <div class="modal fade" id="perfumeModal{{ perfume.id }}" tabindex="-1" role="dialog" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content" style="border-radius: 15px;">
+              <div class="modal-header" style="background-color: #c19d56; color: white;">
+                <h5 class="modal-title">{{ perfume.name_ar }} - {{ perfume.name_en }}</h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+
+              <div class="modal-body" style="text-align: right;">
+                <form method="post" action="{% url 'home:create_order' perfume.id %}">
+                  {% csrf_token %}
+                  
+                  <label>اختر السعة:</label>
+                  <select name="size_id" class="form-control mb-3">
+                    {% for size in perfume.sizes.all %}
+                      <option value="{{ size.id }}">{{ size.size_ml }} مل - {{ size.price }} جنيه</option>
+                    {% endfor %}
+                  </select>
+
+                  <label>عدد الزجاجات:</label>
+                  <input type="number" name="quantity" class="form-control mb-3" min="1" value="1">
+
+                  <button type="submit" class="btn btn-block" 
+                          style="background-color: #c19d56; color: white; font-weight: bold;">
+                    اطلب الآن
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      {% endfor %}
+    </div> <!-- انتهى div المنتجات -->
+  </div>
+</section>
+
+    </div>
+  </div>
+</section>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(function(){
+
+    function enableModals() {
+      // نخلي الـ modal يشتغل على العناصر اللي اتضافت ديناميك
+      $('[data-toggle="modal"]').off('click').on('click', function() {
+        var target = $(this).data('target');
+        $(target).modal('show');
+      });
+    }
+
+    function searchPerfumes() {
+      var query = $('#search-input').val();
+      $.ajax({
+        url: "{% url 'home:search_perfumes' %}",
+        data: {'q': query},
+        success: function(data){
+          $('#products-container').html(data.html);
+          enableModals(); // نفعّل الـ modal بعد ما النتائج تتحدث
+        }
+      });
+    }
+
+    // البحث أثناء الكتابة
+    $('#search-input').on('keyup', searchPerfumes);
+
+    // البحث عند الضغط على الأيقونة
+    $('#search-btn').on('click', searchPerfumes);
+
+    // تفعيل المودالات لأول مرة لما الصفحة تفتح
+    enableModals();
+  });
+</script>
+
+{% endblock body %}

@@ -1,0 +1,347 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+
+<style>
+  /* Container الرئيسي - خلفية سوداء */
+  .success-container {
+    background-color: #000000;
+    direction: rtl;
+    text-align: center;
+    padding: 50px 20px;
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* البطاقة الرئيسية - خلفية سوداء داكنة */
+  .success-card {
+    max-width: 500px;
+    width: 100%;
+    margin: 0 auto;
+    border-radius: 15px;
+    box-shadow: 0 8px 30px rgba(193, 157, 86, 0.3);
+    background: #1a1a1a;
+    border: 2px solid #c19d56;
+    overflow: hidden;
+    animation: slideUp 0.5s ease-out;
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .success-card-body {
+    padding: 40px 30px;
+  }
+
+  /* أيقونة النجاح */
+  .success-icon {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #c19d56, #d4b06a);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    animation: scaleIn 0.6s ease-out 0.2s both;
+    box-shadow: 0 0 20px rgba(193, 157, 86, 0.5);
+  }
+
+  @keyframes scaleIn {
+    from {
+      transform: scale(0);
+    }
+    to {
+      transform: scale(1);
+    }
+  }
+
+  .success-icon i {
+    font-size: 40px;
+    color: #000000;
+    font-weight: bold;
+  }
+
+  /* العنوان */
+  .success-title {
+    color: #c19d56;
+    font-weight: bold;
+    font-size: 26px;
+    margin-bottom: 20px;
+    font-family: 'Cairo', sans-serif;
+    text-shadow: 0 0 10px rgba(193, 157, 86, 0.3);
+  }
+
+  /* معلومات المنتج */
+  .product-info {
+    background: #000000;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border: 2px dashed #c19d56;
+  }
+
+  .product-name {
+    font-size: 20px;
+    font-weight: 600;
+    color: #c19d56;
+    margin-bottom: 10px;
+  }
+
+  .product-details {
+    font-size: 16px;
+    color: #c19d56;
+    margin: 8px 0;
+  }
+
+  .product-details strong {
+    color: #d4b06a;
+  }
+
+  .product-total {
+    font-size: 22px;
+    font-weight: bold;
+    color: #c19d56;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 2px solid #c19d56;
+  }
+
+  /* الأزرار */
+  .action-buttons {
+    margin-top: 30px;
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn-custom {
+    padding: 14px 30px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    min-width: 180px;
+    border: none;
+  }
+
+  .btn-outline-custom {
+    background: transparent;
+    border: 2px solid #c19d56;
+    color: #c19d56;
+  }
+
+  .btn-outline-custom:hover {
+    background: #c19d56;
+    color: #000000;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(193, 157, 86, 0.5);
+  }
+
+  .btn-primary-custom {
+    background: linear-gradient(135deg, #c19d56, #d4b06a);
+    color: #000000;
+    font-weight: 700;
+  }
+
+  .btn-primary-custom:hover {
+    background: linear-gradient(135deg, #d4b06a, #c19d56);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(193, 157, 86, 0.6);
+  }
+
+  /* أيقونات الأزرار */
+  .btn-icon {
+    margin-left: 8px;
+  }
+
+  /* التجاوب للأجهزة اللوحية */
+  @media (max-width: 768px) {
+    .success-container {
+      padding: 40px 15px;
+    }
+
+    .success-card {
+      max-width: 100%;
+      margin: 0 10px;
+    }
+
+    .success-card-body {
+      padding: 30px 20px;
+    }
+
+    .success-title {
+      font-size: 22px;
+    }
+
+    .success-icon {
+      width: 70px;
+      height: 70px;
+    }
+
+    .success-icon i {
+      font-size: 35px;
+    }
+
+    .product-name {
+      font-size: 18px;
+    }
+
+    .product-details {
+      font-size: 15px;
+    }
+
+    .product-total {
+      font-size: 20px;
+    }
+
+    .btn-custom {
+      padding: 12px 25px;
+      font-size: 15px;
+      min-width: 160px;
+    }
+  }
+
+  /* التجاوب للهواتف */
+  @media (max-width: 576px) {
+    .success-container {
+      padding: 30px 10px;
+    }
+
+    .success-card-body {
+      padding: 25px 15px;
+    }
+
+    .success-title {
+      font-size: 20px;
+      margin-bottom: 15px;
+    }
+
+    .success-icon {
+      width: 60px;
+      height: 60px;
+      margin-bottom: 15px;
+    }
+
+    .success-icon i {
+      font-size: 30px;
+    }
+
+    .product-info {
+      padding: 15px;
+      margin: 15px 0;
+    }
+
+    .product-name {
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+
+    .product-details {
+      font-size: 14px;
+      margin: 6px 0;
+    }
+
+    .product-total {
+      font-size: 18px;
+      margin-top: 12px;
+      padding-top: 12px;
+    }
+
+    .action-buttons {
+      margin-top: 20px;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .btn-custom {
+      width: 100%;
+      min-width: auto;
+      padding: 12px 20px;
+      font-size: 15px;
+    }
+  }
+
+  /* تحسينات إضافية */
+  .checkmark {
+    animation: draw 0.5s ease-out 0.3s both;
+  }
+
+  @keyframes draw {
+    from {
+      stroke-dashoffset: 100;
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+</style>
+
+<div class="success-container">
+  <div class="success-card">
+    <div class="success-card-body">
+      
+      <!-- أيقونة النجاح -->
+      <div class="success-icon">
+        <i class="fas fa-check"></i>
+      </div>
+
+      <!-- العنوان -->
+      <h3 class="success-title">
+        تم إضافة المنتج إلى السلة بنجاح!
+      </h3>
+
+      <!-- معلومات المنتج -->
+      <div class="product-info">
+        <div class="product-name">
+          {{ perfume.name_ar }}
+        </div>
+        
+        <div class="product-details">
+          <i class="fas fa-flask" style="color: #c19d56;"></i>
+          السعة: <strong>{{ size.size_ml }} مل</strong>
+        </div>
+        
+        <div class="product-details">
+          <i class="fas fa-box" style="color: #c19d56;"></i>
+          الكمية: <strong>{{ quantity }}</strong>
+        </div>
+
+        <div class="product-total">
+          <i class="fas fa-money-bill-wave"></i>
+          الإجمالي: {{ total_price }} جنيه
+        </div>
+      </div>
+
+      <!-- الأزرار -->
+      <div class="action-buttons">
+        <a href="{% url 'home:home' %}" class="btn btn-custom btn-outline-custom">
+          <i class="fas fa-shopping-bag btn-icon"></i>
+          تصفح المنتجات
+        </a>
+        <a href="{% url 'home:cart' %}" class="btn btn-custom btn-primary-custom">
+          <i class="fas fa-shopping-cart btn-icon"></i>
+          عرض السلة
+        </a>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- إضافة Font Awesome إذا لم يكن موجوداً -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+{% endblock body %}
