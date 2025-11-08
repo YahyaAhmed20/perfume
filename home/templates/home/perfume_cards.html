@@ -264,7 +264,7 @@
           <h2 class="perfume-card-title">
             {{ perfume.name_ar }} - {{ perfume.name_en }}
           </h2>
-          <p class="perfume-card-gender">
+          {% comment %} <p class="perfume-card-gender">
             {% if perfume.gender == 'M' %}
               رجالي 👨
             {% elif perfume.gender == 'F' %}
@@ -272,7 +272,7 @@
             {% else %}
               للجنسين 👥
             {% endif %}
-          </p>
+          </p> {% endcomment %}
         </div>
 
         <div class="perfume-card-image-wrapper">

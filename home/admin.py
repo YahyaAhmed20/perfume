@@ -5,7 +5,7 @@ from .models import Perfume, PerfumeSize,Booking
 class PerfumeSizeInline(admin.TabularInline):
     model = PerfumeSize
     extra = 1  # عدد الصفوف الفارغة الجاهزة للإضافة
-    fields = ('size_ml', 'price')
+    fields = ('size_ml', 'price','is_original')
 
 @admin.register(Perfume)
 class PerfumeAdmin(admin.ModelAdmin):
@@ -26,7 +26,7 @@ class PerfumeAdmin(admin.ModelAdmin):
 
 @admin.register(PerfumeSize)
 class PerfumeSizeAdmin(admin.ModelAdmin):
-    list_display = ('perfume', 'size_ml', 'price')
+    list_display = ('perfume', 'size_ml', 'price','is_original',)  
     list_filter = ('perfume',)
     search_fields = ('perfume__name_ar', 'perfume__name_en')
 

@@ -14,6 +14,8 @@ class Perfume(models.Model):
     name_ar = models.CharField(max_length=100, verbose_name="الاسم بالعربية")
     name_en = models.CharField(max_length=100, verbose_name="الاسم بالإنجليزية")
     image = CloudinaryField(verbose_name="صورة العطر")
+    is_original = models.BooleanField(default=False, verbose_name="إزازة أوريجينال؟")  # 👈 ضيف السطر ده
+
     # gender = models.CharField(max_length=1, choices=GENDER_CHOICES, default='U', verbose_name="النوع")
 
     def __str__(self):
@@ -25,9 +27,11 @@ class PerfumeSize(models.Model):
     perfume = models.ForeignKey(Perfume, on_delete=models.CASCADE, related_name='sizes')
     size_ml = models.PositiveIntegerField(verbose_name="السعة (مل)")
     price = models.DecimalField(max_digits=8, decimal_places=2, verbose_name="السعر")
+    is_original = models.BooleanField(default=False, verbose_name="إزازة أوريجينال؟")  # ✅ هنا مكانها الصحيح
+
 
     def __str__(self):
-        return f"{self.size_ml}ml - {self.price} جنيه"
+        return f"{self.size_ml} مل - {'أوريجينال' if self.is_original else 'عادية'}"
     
     
 class CartItem(models.Model):

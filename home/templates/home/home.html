@@ -428,11 +428,14 @@
                   {% csrf_token %}
                   
                   <label>اختر السعة:</label>
-                  <select name="size_id" class="form-control mb-3">
-                    {% for size in perfume.sizes.all %}
-                      <option value="{{ size.id }}">{{ size.size_ml }} مل - {{ size.price }} جنيه</option>
-                    {% endfor %}
-                  </select>
+<select name="size_id" class="form-control mb-3">
+  {% for size in perfume.sizes.all %}
+    <option value="{{ size.id }}">
+      {{ size.size_ml }} مل{% if size.is_original %} - (أوريجينال){% endif %} - {{ size.price }} جنيه
+    </option>
+  {% endfor %}
+</select>
+
 
                   <label>عدد الزجاجات:</label>
                   <input type="number" name="quantity" class="form-control mb-3" min="1" value="1">
