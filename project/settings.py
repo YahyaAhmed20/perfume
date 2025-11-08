@@ -154,8 +154,12 @@ STATICFILES_DIRS=[
 
 cloudinary.config(
     secure=True,
-    cloudinary_url=config('CLOUDINARY_URL')
+    cloudinary_url=os.getenv("CLOUDINARY_URL", config("CLOUDINARY_URL", default=""))
 )
+# cloudinary.config(
+#     secure=True,
+#     cloudinary_url=config('CLOUDINARY_URL')
+# )
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
