@@ -151,10 +151,12 @@ STATICFILES_DIRS=[
 ]
 
 
-
+# قراءة رابط Cloudinary من environment variables
 cloudinary.config(
-    secure=True,
-    cloudinary_url=os.getenv("CLOUDINARY_URL", config("CLOUDINARY_URL", default=""))
+    cloud_name="dxmzxtbdg",          # ده اللي بعد @
+    api_key="562512275641974",
+    api_secret="_qRjrAzI2zrhXwbMdrzqhKlNg-I",
+    secure=True
 )
 # cloudinary.config(
 #     secure=True,
