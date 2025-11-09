@@ -458,7 +458,7 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-  $(document).ready(function() {
+  $(document).ready(function(){
 
     function enableModals() {
       $('[data-toggle="modal"]').off('click').on('click', function() {
@@ -469,19 +469,11 @@
 
     function searchPerfumes() {
       var query = $('#search-input').val();
-      const csrfToken = $('meta[name="csrf-token"]').attr('content'); // ناخد التوكن من الميتا
-
       $.ajax({
         url: "{% url 'home:search_perfumes' %}",
-        data: { q: query },
-        success: function(data) {
-          // نحط قيمة التوكن الفعلية مكان {% csrf_token %}
-          const htmlWithToken = data.html.replace(
-            /{% csrf_token %}/g,
-            `<input type="hidden" name="csrfmiddlewaretoken" value="${csrfToken}">`
-          );
-
-          $('#products-container').html(htmlWithToken);
+        data: {'q': query},
+        success: function(data){
+          $('#products-container').html(data.html);
           enableModals();
         }
       });
@@ -492,5 +484,6 @@
     enableModals();
   });
 </script>
+
 
 {% endblock body %}

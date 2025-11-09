@@ -19,7 +19,7 @@ def search_perfumes(request):
     html = render_to_string('home/perfume_cards.html', {'perfumes': perfumes})
     return JsonResponse({'html': html}, safe=False)
 
-
+@csrf_exempt
 def create_order(request, perfume_id):
     if request.method == 'POST':
         size_id = request.POST.get('size_id')
@@ -81,22 +81,18 @@ def update_cart_quantity(request):
         item_id = request.POST.get('item_id')
         action = request.POST.get('action')
 
-        session_key = request.session.session_key
-        if not session_key:
-            return JsonResponse({'error': 'Session not found'}, status=400)
-
-        item = CartItem.objects.filter(id=item_id, session_key=session_key).first()
-        if not item:
-            return JsonResponse({'error': 'Item not found'}, status=404)
-
+        item = CartItem.objects.get(id=item_id)
         if action == "increase":
             item.quantity += 1
         elif action == "decrease" and item.quantity > 0:
             item.quantity -= 1
         item.save()
 
+        # احسب السعر الإجمالي لكل منتج
         item_total = item.quantity * item.perfume_size.price
-        total_price = sum(i.quantity * i.perfume_size.price for i in CartItem.objects.filter(session_key=session_key))
+
+        # اجمالي السلة
+        total_price = sum(i.quantity * i.perfume_size.price for i in CartItem.objects.all())
 
         return JsonResponse({
             'new_quantity': item.quantity,
@@ -106,22 +102,18 @@ def update_cart_quantity(request):
 
 
 
+
 @csrf_exempt
 def remove_cart_item(request):
     if request.method == "POST":
         item_id = request.POST.get('item_id')
-        session_key = request.session.session_key
-        if not session_key:
-            return JsonResponse({'error': 'Session not found'}, status=400)
-
-        item = CartItem.objects.filter(id=item_id, session_key=session_key).first()
-        if not item:
-            return JsonResponse({'error': 'Item not found'}, status=404)
+        item = CartItem.objects.get(id=item_id)
         item.delete()
 
-        total_price = sum(i.quantity * i.perfume_size.price for i in CartItem.objects.filter(session_key=session_key))
+        total_price = sum(i.quantity * i.perfume_size.price for i in CartItem.objects.all())
 
         return JsonResponse({'total_price': total_price})
+
 
 
 
@@ -145,12 +137,8 @@ def send_telegram_message(message):
 
 
 def booking(request):
-    session_key = request.session.session_key
-    if not session_key:
-        request.session.create()
-        session_key = request.session.session_key
-
-    cart_items = CartItem.objects.filter(session_key=session_key)
+    """صفحة تأكيد الطلب وإرساله لتليجرام"""
+    cart_items = CartItem.objects.all()
     total_price = sum(i.quantity * i.perfume_size.price for i in cart_items)
 
     if request.method == "POST":
@@ -165,6 +153,7 @@ def booking(request):
             total_price=total_price
         )
 
+        # تحضير رسالة الطلب
         message = (
             "📦 <b>طلب جديد من الموقع 🕌</b>\n\n"
             f"👤 <b>الاسم:</b> {name}\n"
@@ -181,10 +170,12 @@ def booking(request):
             )
 
         message += f"\n💰 <b>الإجمالي:</b> {total_price} جنيه"
+
+        # إرسال الطلب إلى تليجرام
         send_telegram_message(message)
 
-        # تفريغ السلة الخاصة بالـ session
-        CartItem.objects.filter(session_key=session_key).delete()
+        # تفريغ السلة بعد الإرسال
+        CartItem.objects.all().delete()
 
         return render(request, "home/booking_success.html", {"booking": booking})
 
@@ -192,4 +183,3 @@ def booking(request):
         "cart_items": cart_items,
         "total_price": total_price
     })
-
