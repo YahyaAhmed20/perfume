@@ -20,7 +20,6 @@ def search_perfumes(request):
     return JsonResponse({'html': html}, safe=False)
 
 
-@csrf_exempt
 def create_order(request, perfume_id):
     if request.method == 'POST':
         size_id = request.POST.get('size_id')
