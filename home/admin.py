@@ -26,7 +26,7 @@ class PerfumeAdmin(admin.ModelAdmin):
 
 @admin.register(PerfumeSize)
 class PerfumeSizeAdmin(admin.ModelAdmin):
-    list_display = ('perfume', 'size_ml', 'price','is_original',)  
+    list_display = ('perfume', 'size_ml', 'price','is_original')  
     list_filter = ('perfume',)
     search_fields = ('perfume__name_ar', 'perfume__name_en')
 
