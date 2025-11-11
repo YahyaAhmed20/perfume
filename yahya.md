@@ -241,3 +241,517 @@ navbar
 </nav>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+
+
+
+
+
+
+
+
+
+
+
+
+home
+
+
+
+
+
+
+
+
+{% extends 'base.html' %}
+{% load static %}
+{% block body %}
+
+<style>
+  /* ===== تعديلات الخلفية السوداء والألوان الذهبية ===== */
+  body {
+    background-color: #000000 !important;
+    color: #c19d56 !important;
+  }
+
+  .main-logo {
+    height: 260px;              
+    width: auto;
+    filter: drop-shadow(0 0 6px rgba(193,157,86,0.4));
+    transition: all 0.3s ease;
+  }
+
+  /* للشاشات المتوسطة (تابلت) */
+  @media (max-width: 992px) {
+    .main-logo {
+      height: 290px;
+    }
+  }
+
+  /* للشاشات الصغيرة (موبايل) */
+  @media (max-width: 576px) {
+    .main-logo {
+      height: 180px;            
+    }
+  }
+
+  /* توافق كامل للموبايل الصغير جدًا */
+  @media (max-width: 400px) {
+    .main-logo {
+      height: 160px;
+    }
+  }
+
+  /* تحسينات عامة للتجاوب */
+  @media (max-width: 768px) {
+    .hero-wrap h1 {
+      font-size: 32px !important;
+    }
+
+    .hero-wrap p {
+      font-size: 16px !important;
+    }
+
+    .hero-wrap .btn {
+      font-size: 16px !important;
+      padding: 12px 25px !important;
+      margin: 5px !important;
+      display: block;
+      width: 100%;
+      max-width: 300px;
+      margin-left: auto !important;
+      margin-right: auto !important;
+    }
+
+    .hero-wrap .icon span {
+      font-size: 2rem !important;
+    }
+  }
+
+  @media (max-width: 576px) {
+    .hero-wrap h1 {
+      font-size: 28px !important;
+    }
+
+    .hero-wrap p {
+      font-size: 14px !important;
+      padding: 0 15px;
+    }
+  }
+
+  /* تحسين شريط البحث للموبايل */
+  @media (max-width: 768px) {
+    #search-form .input-group {
+      width: 100% !important;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    #search-input {
+      font-size: 14px !important;
+      padding: 8px 15px !important;
+    }
+
+    #search-btn {
+      padding: 8px 15px !important;
+    }
+  }
+
+  /* تحسين بطاقات المنتجات - خلفية سوداء */
+  .perfume-card {
+    background: #1a1a1a;
+    border: 2px solid #c19d56;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(193,157,86,0.3);
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: pointer;
+  }
+
+  .perfume-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 30px rgba(193, 157, 86, 0.6);
+    background: #000000;
+  }
+
+  .perfume-card img {
+    width: 100%;
+    max-width: 320px;
+    height: auto;
+    min-height: 250px;
+    max-height: 330px;
+    object-fit: cover;
+    border-radius: 10px;
+  }
+
+  @media (max-width: 768px) {
+    .perfume-card {
+      margin-bottom: 20px;
+    }
+
+    .perfume-card h2 {
+      font-size: 20px !important;
+    }
+
+    .perfume-card p {
+      font-size: 16px !important;
+    }
+
+    .perfume-card img {
+      max-width: 100%;
+      height: auto;
+      min-height: 200px;
+      max-height: 280px;
+    }
+  }
+
+  @media (max-width: 576px) {
+    .perfume-card h2 {
+      font-size: 18px !important;
+    }
+
+    .perfume-card img {
+      min-height: 180px;
+      max-height: 300px;
+      {% comment %} max-height: 250px; {% endcomment %}
+    }
+  }
+
+  /* تحسين Modal للموبايل - خلفية سوداء */
+  .modal-content {
+    background-color: #1a1a1a !important;
+    border: 2px solid #c19d56 !important;
+    color: #c19d56 !important;
+  }
+
+  .modal-body label {
+    color: #c19d56 !important;
+  }
+
+  .modal-body .form-control {
+    background-color: #000000 !important;
+    border: 1px solid #c19d56 !important;
+    color: #c19d56 !important;
+  }
+
+  .modal-body .form-control:focus {
+    background-color: #1a1a1a !important;
+    border-color: #c19d56 !important;
+    box-shadow: 0 0 0 0.2rem rgba(193, 157, 86, 0.25) !important;
+    color: #c19d56 !important;
+  }
+
+  @media (max-width: 576px) {
+    .modal-dialog {
+      margin: 10px;
+      max-width: calc(100% - 20px);
+    }
+
+    .modal-header h5 {
+      font-size: 16px;
+    }
+
+    .modal-body label {
+      font-size: 14px;
+    }
+
+    .modal-body .form-control {
+      font-size: 14px;
+    }
+  }
+
+  /* إصلاح المسافات للأجهزة الصغيرة */
+  @media (max-width: 768px) {
+    .container {
+      padding-left: 15px;
+      padding-right: 15px;
+    }
+
+    .my-5 {
+      margin-top: 2rem !important;
+      margin-bottom: 2rem !important;
+    }
+
+    .py-5 {
+      padding-top: 2rem !important;
+      padding-bottom: 2rem !important;
+    }
+  }
+
+  /* تحسين ارتفاع Hero Section */
+  .js-fullheight {
+    min-height: 100vh;
+    height: auto;
+  }
+
+  @media (max-width: 768px) {
+    .js-fullheight {
+      min-height: 70vh;
+      padding: 40px 0;
+    }
+  }
+
+  .offer-banner.ribbon {
+    position: absolute;
+    top: 35px;
+    right: 30px;
+    padding: 18px 28px;
+    border-radius: 50px 0 0 50px;
+    color: #c19d56;
+    font-weight: 700;
+    text-align: right;
+    animation: slideIn 1.2s ease-out;
+    font-family: 'Cairo', sans-serif;
+  }
+
+  @keyframes slideIn {
+    from { transform: translateX(200px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+
+  /* ✨ شريط العرض المتحرك - خلفية سوداء */
+  .offer-banner {
+    position: absolute;
+    top: 30px;
+    right: 40px;
+    background: rgba(0, 0, 0, 0.85);
+    border: 2px solid #c19d56;
+    color: #c19d56;
+    padding: 15px 25px;
+    border-radius: 20px;
+    font-weight: 700;
+    text-align: right;
+    box-shadow: 0 0 15px rgba(193,157,86,0.5);
+    animation: slideIn 1.5s ease-out;
+  }
+
+  .offer-banner span {
+    font-size: 20px;
+    display: block;
+    color: #c19d56;
+  }
+
+  .offer-banner p {
+    margin: 0;
+    font-size: 16px;
+    color: #c19d56;
+  }
+
+  /* 🔹 موبايل */
+  @media (max-width: 576px) {
+    .offer-banner {
+      top: 20px;
+      right: 10px;
+      padding: 10px 15px;
+      font-size: 14px;
+      border-radius: 15px;
+    }
+    .offer-banner span {
+      font-size: 16px;
+    }
+    .offer-banner p {
+      font-size: 13px;
+    }
+  }
+
+  /* تعديل ألوان شريط البحث */
+  #search-input {
+    background-color: #1a1a1a !important;
+    color: #c19d56 !important;
+    border: 2px solid #c19d56 !important;
+  }
+
+  #search-input::placeholder {
+    color: rgba(193, 157, 86, 0.6) !important;
+  }
+
+  #search-input:focus {
+    background-color: #000000 !important;
+    border-color: #c19d56 !important;
+    box-shadow: 0 0 0 0.2rem rgba(193, 157, 86, 0.25) !important;
+  }
+</style>
+
+<section class="hero-wrap js-fullheight" 
+         style="background-image: url('{% static "images/background.jpg" %}');
+                background-size: cover;
+                background-position: center;
+                direction: rtl;
+                position: relative;" 
+         data-stellar-background-ratio="0.5">
+
+  <div class="overlay" style="background: rgba(0, 0, 0, 0.75);"></div>
+
+  <!-- ✅ إعلان العرض المتحرك -->
+  <div class="offer-banner">
+    <span>✨ عرض ميتفوتش! </span>
+    <p> عند شرائك 4 منتجات، ستحصل على مكافأة قيّمة: قطعة مجانية بحجم 30 مل. اختر هديتك الآن! </p>
+  </div>
+
+  <div class="container">
+    <div class="row no-gutters slider-text js-fullheight align-items-center justify-content-center">
+      <div class="col-md-10 ftco-animate text-center" style="color: #c19d56;">
+
+        <!-- اللوجو -->
+        <div class="text-center mb-4">
+          <img src="{% static 'images/aa1-removebg-preview.png' %}" 
+               alt="سِيره للعطور"
+               class="main-logo"
+               loading="lazy">
+        </div>
+
+        <!-- الأزرار -->
+        <div class="d-flex flex-column flex-md-row justify-content-center align-items-center">
+          <a href="#products" class="btn btn-primary p-3 px-5 py-4 mb-2 mb-md-0 mr-md-2"
+             style="background-color: #c19d56; border: none; color: #000; font-weight: 600; font-size: 18px;">
+            تسوّق الآن
+          </a>
+        <a href="https://wa.me/201006999700" 
+   target="_blank"
+   class="btn btn-outline-light p-3 px-5 py-4 ml-md-2"
+   style="border: 2px solid #c19d56; background-color: transparent; color: #c19d56; font-weight: 600; font-size: 18px;">
+  تواصل معنا
+</a>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- شريط البحث -->
+<div class="container text-center my-5" style="direction: rtl;">
+  <form id="search-form" class="form-inline justify-content-center" onsubmit="return false;">
+    <div class="input-group" style="width: 320px;">
+      <input id="search-input" type="text" class="form-control"
+             placeholder="ابحث عن عطر..."
+             style="border-radius: 30px 0 0 30px; padding: 10px 20px; font-size: 16px;">
+      
+      <div class="input-group-append">
+        <button id="search-btn" type="button" class="btn"
+                style="background-color: #c19d56; border-radius: 0 30px 30px 0; color: #000; padding: 10px 20px;">
+          <i class="fas fa-search"></i>
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
+
+
+<!-- قسم المنتجات -->
+<section id="products" class="py-5" style="background-color: #000000; direction: rtl;">
+  <div class="container">
+    <div id="products-container" class="row text-center justify-content-center">
+
+      {% for perfume in perfumes %}
+        <div class="col-lg-4 col-md-6 col-sm-6 col-12 mb-4 d-flex align-items-stretch">
+          <div class="perfume-card w-100 p-4"
+            data-toggle="modal" data-target="#perfumeModal{{ perfume.id }}">
+            
+            <div>
+              <h2 style="
+                font-family: 'Cairo', sans-serif; 
+                font-weight: 700; 
+                color: #c19d56;
+                font-size: 24px;
+                letter-spacing: 0.5px;
+                margin-bottom: 10px;
+              ">
+                {{ perfume.name_ar }} - {{ perfume.name_en }}
+              </h2>
+              <p style="color: #c19d56; font-weight: bold; font-size: 18px;">
+                {% comment %} {% if perfume.gender == 'M' %}
+                  رجالي
+                {% elif perfume.gender == 'F' %}
+                  حريمي
+                {% else %}
+                  للجنسين
+                {% endif %} {% endcomment %}
+              </p>
+            </div>
+
+            <div style="flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+  <img src="{{ perfume.image.url }}" alt="{{ perfume.name_ar }}" loading="lazy">
+</div>
+
+
+          </div>
+        </div>
+
+        <!-- Modal لكل منتج -->
+        <div class="modal fade" id="perfumeModal{{ perfume.id }}" tabindex="-1" role="dialog" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content" style="border-radius: 15px;">
+              <div class="modal-header" style="background-color: #c19d56; color: #000;">
+                <h5 class="modal-title">{{ perfume.name_ar }} - {{ perfume.name_en }}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #000;">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+
+              <div class="modal-body" style="text-align: right;">
+                <form method="post" action="{% url 'home:create_order' perfume.id %}">
+                  {% csrf_token %}
+                  
+                  <label>اختر السعة:</label>
+<select name="size_id" class="form-control mb-3">
+  {% for size in perfume.sizes.all %}
+    <option value="{{ size.id }}">
+      {{ size.size_ml }} مل{% if size.is_original %} - (أوريجينال){% endif %} - {{ size.price }} جنيه
+    </option>
+  {% endfor %}
+</select>
+
+
+                  <label>عدد الزجاجات:</label>
+                  <input type="number" name="quantity" class="form-control mb-3" min="1" value="1">
+
+                  <button type="submit" class="btn btn-block" 
+                          style="background-color: #c19d56; color: #000; font-weight: bold;">
+                    اطلب الآن
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(function(){
+
+    function enableModals() {
+      $('[data-toggle="modal"]').off('click').on('click', function() {
+        var target = $(this).data('target');
+        $(target).modal('show');
+      });
+    }
+
+    function searchPerfumes() {
+      var query = $('#search-input').val();
+      $.ajax({
+        url: "{% url 'home:search_perfumes' %}",
+        data: {'q': query},
+        success: function(data){
+          $('#products-container').html(data.html);
+          enableModals();
+        }
+      });
+    }
+
+    $('#search-input').on('keyup', searchPerfumes);
+    $('#search-btn').on('click', searchPerfumes);
+    enableModals();
+  });
+</script>
+
+
+{% endblock body %}
